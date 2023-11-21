@@ -16,6 +16,11 @@ declare global {
   }
 }
 
+/**
+ * Autocomplete component for Google Maps.
+ * This component provides an input field with autocomplete functionality for addresses,
+ * using the Google Maps JavaScript API.
+ */
 @Component({
   selector: 'lib-google-maps-autocomplete',
   standalone: true,
@@ -30,18 +35,32 @@ declare global {
   styleUrls: ['./google-maps-autocomplete.component.scss'],
 })
 export class GoogleMapsAutocompleteComponent implements OnInit {
-  // TODO: handle Input() persistent options
+  /**
+   * API key for Google Maps services. Set this to initialize the component.
+   */
   @Input() set apiKey(value: string) {
     this.configService.apiKey = value;
-    this.loadGoogleMapsApi(); // Consider calling this method here if it's dependent on the apiKey
+    this.loadGoogleMapsApi();
   }
 
+  /**
+   * Emits the raw address prediction object when a place is selected.
+   */
   @Output() addressSelect = new EventEmitter<any>();
+
+  /**
+   * Emits the coordinates (latitude and longitude) of the selected place.
+   */
   @Output() coordinatesSelect = new EventEmitter<{
     lat: number;
     lng: number;
   }>();
+
+  /**
+   * Emits the formatted address details of the selected place.
+   */
   @Output() addressDetailsSelect = new EventEmitter<any>();
+
   private autocompleteService: any;
   predictions: any[] = [];
 
@@ -49,9 +68,7 @@ export class GoogleMapsAutocompleteComponent implements OnInit {
 
   ngOnInit() {
     this.searchControl.valueChanges
-      .pipe(
-        debounceTime(300) // Adjust the debounce time as needed
-      )
+      .pipe(debounceTime(300))
       .subscribe((value) => this.onSearch(value));
   }
 
@@ -60,6 +77,10 @@ export class GoogleMapsAutocompleteComponent implements OnInit {
     private googlePlacesService: GooglePlacesService
   ) {}
 
+  /**
+   * Loads the Google Maps API and initializes the Autocomplete service.
+   * This function is called internally when the apiKey input is set.
+   */
   loadGoogleMapsApi(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       if (window.google && window.google.maps) {
@@ -84,6 +105,10 @@ export class GoogleMapsAutocompleteComponent implements OnInit {
     });
   }
 
+  /**
+   * Handles the search input change and fetches autocomplete predictions.
+   * @param value - The current value of the autocomplete search input.
+   */
   onSearch(value: string): void {
     if (!value) {
       this.predictions = [];
@@ -120,6 +145,11 @@ export class GoogleMapsAutocompleteComponent implements OnInit {
     );
   }
 
+  /**
+   * Handles selection of an autocomplete prediction.
+   * This function emits various pieces of information about the selected place.
+   * @param event - The selection event object containing information about the selected prediction.
+   */
   onSelect(event: MatAutocompleteSelectedEvent): void {
     const prediction = event.option.value;
     this.addressSelect.emit(prediction); // Emit raw prediction
@@ -129,35 +159,19 @@ export class GoogleMapsAutocompleteComponent implements OnInit {
     this.emitAddressDetails(placeId);
   }
 
-  /** Emmits the prediction raw formated
-  onSelect(event: MatAutocompleteSelectedEvent): void {
-    console.log(event);
-    // If logging the event reveals that the structure is different, adjust the following line accordingly.
-    const prediction = event.option.value;
-    this.addressSelect.emit(prediction);
-    this.predictions = [];
-  }
-  */
-
-  /** Emmits coordinates
-  onSelect(event: MatAutocompleteSelectedEvent): void {
-    const placeId = event.option.value.place_id;
-
-    this.getLatLngFromPrediction(placeId)
-      .then((coords) => {
-        console.log('Latitude:', coords.lat, 'Longitude:', coords.lng);
-        // Now you can emit these coordinates, or do whatever you need with them
-      })
-      .catch((errorStatus) => {
-        console.error('Error fetching place details:', errorStatus);
-      });
-  }
-  */
-
-  initializeAutocompleteService() {
+  /**
+   * Initializes the AutocompleteService.
+   * This function is called after the Google Maps API has been loaded.
+   */
+  initializeAutocompleteService(): void {
     this.autocompleteService = new google.maps.places.AutocompleteService();
   }
 
+  /**
+   * Formats the display of autocomplete predictions in the input field.
+   * @param prediction - The prediction object returned from the Autocomplete service.
+   * @returns A string representing the formatted address.
+   */
   displayFn(prediction: any): string {
     return prediction && prediction.description ? prediction.description : '';
   }
