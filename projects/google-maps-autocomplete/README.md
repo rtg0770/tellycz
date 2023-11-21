@@ -1,24 +1,74 @@
-# GoogleMapsAutocomplete
+# Google Maps Autocomplete Component
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.0.
+This Angular component provides an easy-to-use interface for the Google Maps Autocomplete functionality. Users can select an address from the dropdown that appears as they type, and various outputs provide the address, coordinates, and full address details.
 
-## Code scaffolding
+## Features
 
-Run `ng generate component component-name --project google-maps-autocomplete` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project google-maps-autocomplete`.
-> Note: Don't forget to add `--project google-maps-autocomplete` or else it will be added to the default project in your `angular.json` file. 
+- Autocomplete input for addresses using Google Maps API
+- Outputs for selected address, coordinates, and detailed address information
+- Configurable country restriction for autocomplete results
 
-## Build
+## Installation
 
-Run `ng build google-maps-autocomplete` to build the project. The build artifacts will be stored in the `dist/` directory.
+Install the component using npm:
 
-## Publishing
+npm install @rng077/google-maps-autocomplete --save
 
-After building your library with `ng build google-maps-autocomplete`, go to the dist folder `cd dist/google-maps-autocomplete` and run `npm publish`.
+## Usage
 
-## Running unit tests
+First, set your Google Maps API key and optional country code in the parent component:
 
-Run `ng test google-maps-autocomplete` to execute the unit tests via [Karma](https://karma-runner.github.io).
+// In your parent component
+googleMapsApiKey = environment.googleMapsApiKey;
+selectedCountryCode: string = 'CZ'; // Default country code, change as needed
 
-## Further help
+Then, implement the event handlers in your parent component:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+// Also in your parent component
+handleAddressSelect(event: any) {
+// Handle the address selection event
+console.log(event);
+}
+
+handleCoordinatesSelect(coords: { lat: number; lng: number }): void {
+// Handle the coordinates select event
+console.log(coords);
+}
+
+handleAddressDetailsSelect(details: any): void {
+// Handle the address details select event
+console.log(details);
+}
+
+In your parent component's HTML template, use the component as follows:
+<lib-google-maps-autocomplete
+[apiKey]="googleMapsApiKey"
+[countryCode]="selectedCountryCode"
+(addressSelect)="handleAddressSelect($event)"
+  (coordinatesSelect)="handleCoordinatesSelect($event)"
+(addressDetailsSelect)="handleAddressDetailsSelect($event)"
+
+> </lib-google-maps-autocomplete>
+
+Make sure you have the required CSS to style the autocomplete component, or customize it as needed.
+
+## Inputs and Outputs
+
+    apiKey: Your API key for Google Maps services.
+    countryCode: (Optional) Restricts predictions to the specified country (ISO 3166-1 Alpha-2 country code, e.g., 'US', 'CZ').
+
+## Outputs
+
+    addressSelect: Emits the raw address prediction object when a place is selected.
+    coordinatesSelect: Emits the coordinates (latitude and longitude) of the selected place.
+    addressDetailsSelect: Emits the formatted address details of the selected place.
+
+For more details, refer to the Google Maps Autocomplete documentation.
+
+## Contributing
+
+Contributions are welcome. Please submit a pull request or create an issue for any features or bug fixes.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE.md file for details.

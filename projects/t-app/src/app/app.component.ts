@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { environment } from '../environments/environment';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,6 +9,7 @@ import { environment } from '../environments/environment';
 export class AppComponent {
   title = 't-app';
   googleMapsApiKey = environment.googleMapsApiKey;
+  selectedCountryCode: string = 'CZ';
 
   handleAddressSelect(event: any) {
     // Define the method to handle the event

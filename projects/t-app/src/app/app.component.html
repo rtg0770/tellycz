@@ -1,5 +1,6 @@
 <lib-google-maps-autocomplete
   [apiKey]="googleMapsApiKey"
+  [countryCode]="selectedCountryCode"
   (addressSelect)="handleAddressSelect($event)"
   (coordinatesSelect)="handleCoordinatesSelect($event)"
   (addressDetailsSelect)="handleAddressDetailsSelect($event)"

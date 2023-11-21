@@ -1,5 +1,5 @@
 {
-  "name": "google-maps-autocomplete",
+  "name": "@rng077/google-maps-autocomplete",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^17.0.0",

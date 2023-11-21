@@ -44,6 +44,11 @@ export class GoogleMapsAutocompleteComponent implements OnInit {
   }
 
   /**
+   * Optional input for restricting autocomplete predictions to a specific country.
+   */
+  @Input() countryCode: string = 'CZ';
+
+  /**
    * Emits the raw address prediction object when a place is selected.
    */
   @Output() addressSelect = new EventEmitter<any>();
@@ -115,10 +120,10 @@ export class GoogleMapsAutocompleteComponent implements OnInit {
       return;
     }
 
-    // Set up the componentRestrictions option with the country code for the Czech Republic (CZ)
+    // Use the input country code if provided
     const autocompleteRequest = {
       input: value,
-      componentRestrictions: { country: 'CZ' },
+      componentRestrictions: { country: this.countryCode },
     };
 
     // Use the autocomplete service to get predictions
