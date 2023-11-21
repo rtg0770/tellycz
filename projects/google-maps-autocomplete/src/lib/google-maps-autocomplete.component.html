@@ -1,0 +1,18 @@
+<mat-form-field appearance="fill">
+  <mat-label>Address</mat-label>
+  <input
+    type="text"
+    matInput
+    [matAutocomplete]="auto"
+    [formControl]="searchControl"
+  />
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="displayFn"
+    (optionSelected)="onSelect($event)"
+  >
+    <mat-option *ngFor="let prediction of predictions" [value]="prediction">
+      {{ prediction.description }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
